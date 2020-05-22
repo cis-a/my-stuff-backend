@@ -8,6 +8,7 @@ public class MyStuffBackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MyStuffBackendApplication.class, args);
+
 	}
 
 }
