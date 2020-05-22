@@ -16,7 +16,6 @@ import lombok.Setter;
 public class Item {
 
 	public Item() {
-		this.id = null;
 	}
 
 	public Item(long id, String name, int amount, String location, String description, Date lastUsed) {
