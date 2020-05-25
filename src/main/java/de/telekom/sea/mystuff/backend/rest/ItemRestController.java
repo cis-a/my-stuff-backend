@@ -1,5 +1,6 @@
 package de.telekom.sea.mystuff.backend.rest;
 
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,7 +60,11 @@ public class ItemRestController {
 	@DeleteMapping("items/{id}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void deleteItem(@PathVariable Long id) {
+		try {
 		repo.deleteById(id);
+		} catch (Exception e) {
+//			HttpResponse.status(HttpStatus.NOT_FOUND);
+		}
 	}
 
 }
