@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,15 @@ import lombok.Setter;
 public class Item {
 
 	public Item() {
+	}
+	
+	@Builder
+	public Item(long id, String name, int amount, String location, Date lastUsed) {
+		this.id = id;
+		this.name = name;
+		this.amount = amount;
+		this.location = location;
+		this.lastUsed = lastUsed;
 	}
 
 	public Item(long id, String name, int amount, String location, String description, Date lastUsed) {

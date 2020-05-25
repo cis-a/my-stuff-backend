@@ -3,7 +3,6 @@ package de.telekom.sea.mystuff.backend.bootstrap;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -34,9 +33,9 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
 
 	private void initData() throws ParseException {
 
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-
-		String dateInString = "22-MAY-2020";
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+ 
+		String dateInString = "22-05-2020";
 		Date date = formatter.parse(dateInString);
 
 		Item teapot = new Item(1L, "Teapot", 1, "to left of door, top shelf, brown paper box",
