@@ -44,10 +44,10 @@ public class ItemRestController {
 
 	@GetMapping("items/{id}")
 	public ResponseEntity<Optional<Item>> getById(@PathVariable("id") Long id) {
-		try {
-			Optional<Item> item = repo.findById(id);
+		Optional<Item> item = repo.findById(id);
+		if (item.isPresent()) {
 			return ResponseEntity.status(HttpStatus.OK).body(item);
-		} catch (Exception e) {
+		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
@@ -59,8 +59,14 @@ public class ItemRestController {
 	}
 
 	@PutMapping("items/{id}")
-	public Item putItem(@RequestBody Item item) {
-		return this.repo.save(item);
+	public ResponseEntity<Item> putItem(@RequestBody Item item) {
+		Optional<Item> checkItem = repo.findById(item.getId());
+		if (checkItem.isPresent()) {
+			Item newItem = this.repo.save(item);
+			return ResponseEntity.status(HttpStatus.OK).body(newItem);
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(item);
+		}
 	}
 
 	@DeleteMapping("items/{id}")

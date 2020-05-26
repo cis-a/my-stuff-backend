@@ -37,7 +37,7 @@ class ItemRestControllerTest {
 	private ItemRepository repo;
 
 	@BeforeEach
-	void setupRepo() {
+	void emptyDatabase() {
 		repo.deleteAll();
 	}
 
@@ -59,9 +59,12 @@ class ItemRestControllerTest {
 		Item lawnTrimmer = buildLawnTrimmer();
 		restTemplate.postForEntity(BASE_PATH, lawnTrimmer, Item.class);
 		// When | Act
-		ResponseEntity<Item> response = restTemplate.getForEntity(BASE_PATH, Item.class);
+//		ResponseEntity<Item> response = restTemplate.getForEntity(BASE_PATH, Item.class);
+//		ResponseEntity<List> response = restTemplate.getForEntity(BASE_PATH, List.class);
+		ResponseEntity<Item[]> response = restTemplate.getForEntity(BASE_PATH, Item[].class);
 		// Then | Assert
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody().length).isEqualTo(2);
 //		assertThat(response.getBody().get(0)).isEqualTo(lawnMower);
 //		assertThat(response.getBody().get(1)).isEqualTo(lawnTrimmer);
 	}
@@ -75,7 +78,6 @@ class ItemRestControllerTest {
 		// Then | Assert
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isEqualToComparingFieldByField(lawnMower);
-
 	}
 
 	@Test
@@ -119,23 +121,26 @@ class ItemRestControllerTest {
 		// Given | Arrange
 		Item lawnMower = givenAnInsertedItem().getBody();
 		Item lawnTrimmer = buildLawnTrimmer();
+		lawnTrimmer.setId(lawnMower.getId());
 		// When | Act
 //		RequestEntity<String> request = new RequestEntity<>(HttpMethod.PUT,
 //				new URI(restTemplate.getRootUri() + BASE_PATH + "/" + lawnMower.getId()));
-		RequestEntity<String> request = new RequestEntity<>(HttpMethod.PUT,
+		RequestEntity<Item> request = new RequestEntity<>(lawnTrimmer, HttpMethod.PUT,
 				new URI(BASE_PATH + "/" + lawnMower.getId()));
 		ResponseEntity<Item> response = restTemplate.exchange(request, Item.class);
 		// Then | Assert
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody()).isEqualToComparingFieldByField(lawnTrimmer);
+		assertThat(response.getBody()).isEqualToIgnoringGivenFields(lawnTrimmer, "id");
 	}
 
 	@Test
-	void shouldNotBeAbleToReplaceAnItemWithUnknownId() throws URISyntaxException {
+	void shouldNotBeAbleToReplaceAnItemWithUnknownId() throws URISyntaxException, ParseException {
 		// Given | Arrange
-		Long id = 4711L;
+		long id = 4711L;
+		Item lawnTrimmer = buildLawnTrimmer();
+		lawnTrimmer.setId(id);
 		// When | Act
-		RequestEntity<String> request = new RequestEntity<>(HttpMethod.PUT,
+		RequestEntity<Item> request = new RequestEntity<>(lawnTrimmer, HttpMethod.PUT,
 				new URI(restTemplate.getRootUri() + BASE_PATH + "/" + id));
 		ResponseEntity<Item> response = restTemplate.exchange(request, Item.class);
 		// Then | Assert
