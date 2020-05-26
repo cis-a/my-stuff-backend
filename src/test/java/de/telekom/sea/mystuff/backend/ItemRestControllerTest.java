@@ -93,8 +93,10 @@ class ItemRestControllerTest {
 		// Given | Arrange
 		Item lawnMower = givenAnInsertedItem().getBody();
 		// When | Act
+//		RequestEntity<String> request = new RequestEntity<>(HttpMethod.DELETE,
+//				new URI(restTemplate.getRootUri() + BASE_PATH + "/" + lawnMower.getId()));
 		RequestEntity<String> request = new RequestEntity<>(HttpMethod.DELETE,
-				new URI(restTemplate.getRootUri() + BASE_PATH + "/" + lawnMower.getId()));
+				new URI(BASE_PATH + "/" + lawnMower.getId()));
 		ResponseEntity<String> response = restTemplate.exchange(request, String.class);
 		// Then | Assert
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
@@ -118,8 +120,10 @@ class ItemRestControllerTest {
 		Item lawnMower = givenAnInsertedItem().getBody();
 		Item lawnTrimmer = buildLawnTrimmer();
 		// When | Act
+//		RequestEntity<String> request = new RequestEntity<>(HttpMethod.PUT,
+//				new URI(restTemplate.getRootUri() + BASE_PATH + "/" + lawnMower.getId()));
 		RequestEntity<String> request = new RequestEntity<>(HttpMethod.PUT,
-				new URI(restTemplate.getRootUri() + BASE_PATH + "/" + lawnMower.getId()));
+				new URI(BASE_PATH + "/" + lawnMower.getId()));
 		ResponseEntity<Item> response = restTemplate.exchange(request, Item.class);
 		// Then | Assert
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
